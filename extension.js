@@ -3,6 +3,7 @@
 const vscode = require('vscode');
 
 let myTimer;
+let myStart;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -18,25 +19,41 @@ function activate(context) {
 
 	
 	const timerCommandId = 'dalydoro.timerSelected';
+	const startCommandId = 'dalydoro.startSelected';
 
+	// Register command for timer status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(timerCommandId, () => {
 		vscode.window.showInformationMessage("timer was selected!");
 	}));
 
-	// create status bar timer item
-	myTimer = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+	// Register command for start status bar item
+	context.subscriptions.push(vscode.commands.registerCommand(startCommandId, () => {
+		vscode.window.showInformationMessage("start button selected!");
+	}))
+
+	// Create status bar timer item
+	myTimer = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
 	myTimer.command = timerCommandId;
 	context.subscriptions.push(myTimer);
 
-	updateTimer();
+	// Create start status bar item
+	myStart = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+	myStart.command = startCommandId;
+	context.subscriptions.push(myStart);
 
+	showTimer();
+	showStart();
 }
 
-function updateTimer() {
+function showTimer() {
 	myTimer.text = 'I am timer';
 	myTimer.show();
 }
 
+function showStart() {
+	myStart.text = `$(play)`;
+	myStart.show();
+}
 
 exports.activate = activate;
 
