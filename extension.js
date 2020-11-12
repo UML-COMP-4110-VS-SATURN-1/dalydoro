@@ -4,6 +4,8 @@ const vscode = require('vscode');
 
 let myTimer;
 let myStart;
+let myPause;
+let myList;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -20,6 +22,8 @@ function activate(context) {
 	
 	const timerCommandId = 'dalydoro.timerSelected';
 	const startCommandId = 'dalydoro.startSelected';
+	const pauseCommandId = 'dalydoro.pauseSelected';
+	const listCommandId = 'dalydoro.listSelected';
 
 	// Register command for timer status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(timerCommandId, () => {
@@ -29,7 +33,17 @@ function activate(context) {
 	// Register command for start status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(startCommandId, () => {
 		vscode.window.showInformationMessage("start button selected!");
-	}))
+	}));
+
+	// Register command for pause status bar item
+	context.subscriptions.push(vscode.commands.registerCommand(pauseCommandId, () => {
+		vscode.window.showInformationMessage("pause button selected!");
+	}));
+
+	// Register command for list status bar item
+	context.subscriptions.push(vscode.commands.registerCommand(listCommandId, () => {
+		vscode.window.showInformationMessage("list button selected!");
+	}));
 
 	// Create status bar timer item
 	myTimer = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
@@ -41,8 +55,21 @@ function activate(context) {
 	myStart.command = startCommandId;
 	context.subscriptions.push(myStart);
 
-	showTimer();
+	// Create pause status bar item
+	myPause = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+	myPause.command = pauseCommandId;
+	context.subscriptions.push(myPause);
+
+	// Create list status bar item
+	myList = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+	myList.command = listCommandId;
+	context.subscriptions.push(myList);
+
+	// Call functions to display status bar items
+	showTimer(); 
 	showStart();
+	showPause();
+	showList();
 }
 
 function showTimer() {
@@ -53,6 +80,16 @@ function showTimer() {
 function showStart() {
 	myStart.text = `$(play)`;
 	myStart.show();
+}
+
+function showPause() {
+	myPause.text = `$(debug-pause)`;
+	myPause.show();
+}
+
+function showList() {
+	myList.text = `$(tasklist)`;
+	myList.show();
 }
 
 exports.activate = activate;
