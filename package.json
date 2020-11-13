@@ -13,14 +13,6 @@
 		"onStartupFinished"
 	],
 	"main": "./extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "dalydoro.helloWorld",
-				"title": "Hello World"
-			}
-		]
-	},
 	"scripts": {
 		"lint": "eslint .",
 		"pretest": "npm run lint",

@@ -6,6 +6,7 @@ let myTimer;
 let myStart;
 let myPause;
 let myList;
+let taskList = ["task 1", "task 2"];
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -43,25 +44,26 @@ function activate(context) {
 	// Register command for list status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(listCommandId, () => {
 		vscode.window.showInformationMessage("list button selected!");
+		vscode.window.showQuickPick(taskList);
 	}));
 
 	// Create status bar timer item
-	myTimer = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+	myTimer = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 3);
 	myTimer.command = timerCommandId;
 	context.subscriptions.push(myTimer);
 
 	// Create start status bar item
-	myStart = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+	myStart = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 2);
 	myStart.command = startCommandId;
 	context.subscriptions.push(myStart);
 
 	// Create pause status bar item
-	myPause = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+	myPause = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
 	myPause.command = pauseCommandId;
 	context.subscriptions.push(myPause);
 
 	// Create list status bar item
-	myList = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+	myList = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
 	myList.command = listCommandId;
 	context.subscriptions.push(myList);
 
