@@ -3,8 +3,8 @@
 const vscode = require('vscode');
 
 let myTimer;
-let myStart;
-let myPause;
+let myStartStop;
+//let myPause;
 let myList;
 let taskList = ["task 1", "task 2"];
 
@@ -22,8 +22,8 @@ function activate(context) {
 
 	
 	const timerCommandId = 'dalydoro.timerSelected';
-	const startCommandId = 'dalydoro.startSelected';
-	const pauseCommandId = 'dalydoro.pauseSelected';
+	const startStopCommandId = 'dalydoro.startSelected';
+	//const pauseCommandId = 'dalydoro.pauseSelected';
 	const listCommandId = 'dalydoro.listSelected';
 
 	// Register command for timer status bar item
@@ -32,14 +32,14 @@ function activate(context) {
 	}));
 
 	// Register command for start status bar item
-	context.subscriptions.push(vscode.commands.registerCommand(startCommandId, () => {
+	context.subscriptions.push(vscode.commands.registerCommand(startStopCommandId, () => {
 		vscode.window.showInformationMessage("start button selected!");
 	}));
 
 	// Register command for pause status bar item
-	context.subscriptions.push(vscode.commands.registerCommand(pauseCommandId, () => {
-		vscode.window.showInformationMessage("pause button selected!");
-	}));
+	// context.subscriptions.push(vscode.commands.registerCommand(pauseCommandId, () => {
+	// 	vscode.window.showInformationMessage("pause button selected!");
+	// }));
 
 	// Register command for list status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(listCommandId, () => {
@@ -53,14 +53,14 @@ function activate(context) {
 	context.subscriptions.push(myTimer);
 
 	// Create start status bar item
-	myStart = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 2);
-	myStart.command = startCommandId;
-	context.subscriptions.push(myStart);
+	myStartStop = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 2);
+	myStartStop.command = startStopCommandId;
+	context.subscriptions.push(myStartStop);
 
 	// Create pause status bar item
-	myPause = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
-	myPause.command = pauseCommandId;
-	context.subscriptions.push(myPause);
+	// myPause = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
+	// myPause.command = pauseCommandId;
+	// context.subscriptions.push(myPause);
 
 	// Create list status bar item
 	myList = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
@@ -70,7 +70,7 @@ function activate(context) {
 	// Call functions to display status bar items
 	showTimer(); 
 	showStart();
-	showPause();
+	//showPause();
 	showList();
 }
 
@@ -80,14 +80,14 @@ function showTimer() {
 }
 
 function showStart() {
-	myStart.text = `$(play)`;
-	myStart.show();
+	myStartStop.text = `$(play)`;
+	myStartStop.show();
 }
 
-function showPause() {
-	myPause.text = `$(debug-pause)`;
-	myPause.show();
-}
+// function showPause() {
+// 	myPause.text = `$(debug-pause)`;
+// 	myPause.show();
+// }
 
 function showList() {
 	myList.text = `$(tasklist)`;
