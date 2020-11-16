@@ -4,9 +4,27 @@ const vscode = require('vscode');
 
 let myTimer;
 let myStartStop;
-//let myPause;
 let myList;
 let taskList = ["task 1", "task 2"];
+
+// Mock-up object holds value for timer, and a bool for whether it is paused or not.
+// For temporary use only, needs to be developed further.
+let myTimerObj = {
+	remaining: "i am timer", // initial value
+	isPaused: true, // shows whether paused
+	checkPaused: function() {
+		return this.isPaused;
+	},
+	getRemaining: function() {
+		return this.remaining;
+	},
+	togglePause: function() {
+		this.isPaused = !this.isPaused;
+	},
+	setRemaining: function(val) {
+		this.remaining = val;
+	}
+};
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -23,7 +41,6 @@ function activate(context) {
 	
 	const timerCommandId = 'dalydoro.timerSelected';
 	const startStopCommandId = 'dalydoro.startSelected';
-	//const pauseCommandId = 'dalydoro.pauseSelected';
 	const listCommandId = 'dalydoro.listSelected';
 
 	// Register command for timer status bar item
@@ -31,15 +48,13 @@ function activate(context) {
 		vscode.window.showInformationMessage("timer was selected!");
 	}));
 
-	// Register command for start status bar item
+	// Register command for start/stop status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(startStopCommandId, () => {
-		vscode.window.showInformationMessage("start button selected!");
+		vscode.window.showInformationMessage("start/stop button selected!");
+		myTimerObj.togglePause(); // Start stop button pushed, toggle pause value, update button state
+		showTimer();
+		showStartStop();
 	}));
-
-	// Register command for pause status bar item
-	// context.subscriptions.push(vscode.commands.registerCommand(pauseCommandId, () => {
-	// 	vscode.window.showInformationMessage("pause button selected!");
-	// }));
 
 	// Register command for list status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(listCommandId, () => {
@@ -57,11 +72,6 @@ function activate(context) {
 	myStartStop.command = startStopCommandId;
 	context.subscriptions.push(myStartStop);
 
-	// Create pause status bar item
-	// myPause = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
-	// myPause.command = pauseCommandId;
-	// context.subscriptions.push(myPause);
-
 	// Create list status bar item
 	myList = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
 	myList.command = listCommandId;
@@ -69,25 +79,23 @@ function activate(context) {
 
 	// Call functions to display status bar items
 	showTimer(); 
-	showStart();
-	//showPause();
+	showStartStop();
 	showList();
 }
 
 function showTimer() {
-	myTimer.text = 'I am timer';
+	myTimer.text = myTimerObj.getRemaining();
 	myTimer.show();
 }
 
-function showStart() {
-	myStartStop.text = `$(play)`;
+function showStartStop() {
+	if(myTimerObj.checkPaused()){ 
+		myStartStop.text = `$(play)`;
+	} else {
+		myStartStop.text = `$(debug-pause)`;
+	}
 	myStartStop.show();
 }
-
-// function showPause() {
-// 	myPause.text = `$(debug-pause)`;
-// 	myPause.show();
-// }
 
 function showList() {
 	myList.text = `$(tasklist)`;
