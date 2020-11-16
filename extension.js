@@ -52,8 +52,8 @@ function activate(context) {
 	context.subscriptions.push(vscode.commands.registerCommand(startStopCommandId, () => {
 		vscode.window.showInformationMessage("start/stop button selected!");
 		myTimerObj.togglePause(); // Start stop button pushed, toggle pause value, update button state
-		showTimer();
 		showStartStop();
+		showTimer();
 	}));
 
 	// Register command for list status bar item
@@ -91,8 +91,10 @@ function showTimer() {
 function showStartStop() {
 	if(myTimerObj.checkPaused()){ 
 		myStartStop.text = `$(play)`;
+		myTimerObj.setRemaining(`timer paused`);
 	} else {
 		myStartStop.text = `$(debug-pause)`;
+		myTimerObj.setRemaining(`timer started`);
 	}
 	myStartStop.show();
 }
