@@ -6,6 +6,7 @@ let myTimer;
 let myStartStop;
 let myList;
 let taskList = ["task 1", "task 2"];
+let startTimer 
 
 // Mock-up object holds value for timer, and a bool for whether it is paused or not.
 // For temporary use only, needs to be developed further.
@@ -80,7 +81,7 @@ function activate(context) {
 
 	// Call functions to display status bar items
 	showTimer(); 
-	setTimerLenght(25); // 25 is placeholder lenght
+	setTimerLenght(0.1); // 25 is placeholder lenght
 	showStartStop();
 	showList();
 }
@@ -101,6 +102,10 @@ function timerRefresh(){
 }
 
 function showTimer() {
+	if(myTimerObj.timeInSec <= 0){
+		myTimerObj.setRemaining(`Timer expired`);
+		clearInterval(startTimer);
+	}
 	myTimer.text = myTimerObj.getRemaining();
 	myTimer.show();
 }
@@ -110,15 +115,11 @@ function showStartStop() {
 	if(!myTimerObj.checkPaused()){ 
 		myStartStop.text = `$(debug-pause)`;
 		myTimerObj.setRemaining(`timer started`);
-		var startTimer = setInterval(function timer(){
+		startTimer = setInterval(function timer(){
 			timerRefresh();
-			if(myTimerObj.timeInSec <= 0){
-				clearInterval(startTimer);
-			}
 		}, 1000);
 	} else {
 		myStartStop.text = `$(play)`;
-		myTimerObj.setRemaining(`timer paused`);
 		clearInterval(startTimer);
 	}
 	myStartStop.show();
