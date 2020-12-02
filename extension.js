@@ -1,16 +1,18 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+const { PerformanceObserver } = require('perf_hooks');
 const vscode = require('vscode');
 
 let myTimer;
 let myStartStop;
 let myList;
 let taskList = ["task 1", "task 2"];
-let startTimer 
+let startTimer;
 
 // Mock-up object holds value for timer, and a bool for whether it is paused or not.
 // For temporary use only, needs to be developed further.
 let myTimerObj = {
+	pomodoroSection: 0,
 	timeInSec: 0,
 	remaining: "Timer will start",// "i am timer", // initial value
 	isPaused: true, // shows whether paused
@@ -27,6 +29,15 @@ let myTimerObj = {
 		this.remaining = val;
 	}
 };
+
+let periodLength = {
+	work: 25,
+	shortBreak: 5,
+	longBreak: 10,
+	snooze: 5
+};
+
+
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -80,16 +91,35 @@ function activate(context) {
 	context.subscriptions.push(myList);
 
 	// Call functions to display status bar items
-	showTimer(); 
-	setTimerlength(0.1); // 25 is placeholder length
+	setTimerlength();
+	showTimer();
 	showStartStop();
 	showList();
 }
 
 //length should be given in minutes
-function setTimerlength(length){
+function setTimerlength(){
+	let length;
+	
+	// deciding which period is being useds
+	if(myTimerObj.pomodoroSection >= 8){
+		length = periodLength.longBreak;
+		myTimerObj.pomodoroSection = 0;
+	}else if(myTimerObj.pomodoroSection % 2 == 0){
+		length = periodLength.work;
+		myTimerObj.pomodoroSection++;
+	}else{
+		length = periodLength.shortBreak;
+		myTimerObj.pomodoroSection++;
+	}
 	myTimerObj.timeInSec = length * 60;
-	myTimerObj.remaining = length.toString() + ":00";
+
+	// if timer starts at less then a minute this displays it correctly
+	if(myTimerObj.timeInSec >= 60){
+		myTimerObj.remaining = length.toString() + ":00";	
+	}else{
+		myTimerObj.remaining = "0:" + length.toString();
+	}
 }
 
 // this function will refresh the timer on the bottom of the corner
@@ -105,6 +135,8 @@ function showTimer() {
 	if(myTimerObj.timeInSec <= 0){
 		myTimerObj.setRemaining(`Timer expired`);
 		clearInterval(startTimer);
+		setTimerlength();
+		showStartStop();
 	}
 	myTimer.text = myTimerObj.getRemaining();
 	myTimer.show();
