@@ -81,15 +81,15 @@ function activate(context) {
 
 	// Call functions to display status bar items
 	showTimer(); 
-	setTimerLenght(0.1); // 25 is placeholder lenght
+	setTimerlength(0.1); // 25 is placeholder length
 	showStartStop();
 	showList();
 }
 
-//lenght should be given in minutes
-function setTimerLenght(lenght){
-	myTimerObj.timeInSec = lenght * 60;
-	myTimerObj.remaining = lenght.toString() + ":00";
+//length should be given in minutes
+function setTimerlength(length){
+	myTimerObj.timeInSec = length * 60;
+	myTimerObj.remaining = length.toString() + ":00";
 }
 
 // this function will refresh the timer on the bottom of the corner
