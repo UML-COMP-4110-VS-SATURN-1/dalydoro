@@ -37,6 +37,11 @@ let periodLength = {
 	snooze: 5
 };
 
+let checkMarks = {
+	marks: [],
+	cycles: null,
+	numOfCyclesCompleted: 0
+};
 
 
 // this method is called when your extension is activated
@@ -101,8 +106,9 @@ function activate(context) {
 function setTimerlength(){
 	let length;
 	
+	console.log(myTimerObj.pomodoroSection);
 	// deciding which period is being useds
-	if(myTimerObj.pomodoroSection >= 8){
+	if(myTimerObj.pomodoroSection >= 7){
 		length = periodLength.longBreak;
 		myTimerObj.pomodoroSection = 0;
 	}else if(myTimerObj.pomodoroSection % 2 == 0){
@@ -137,6 +143,28 @@ function showTimer() {
 		clearInterval(startTimer);
 		setTimerlength();
 		showStartStop();
+
+		// Add and display checkmark when a work period completed
+		// (resets on an extended break)
+		if (myTimerObj.pomodoroSection == 0) {
+			checkMarks.numOfCyclesCompleted++;
+			for(var i = 0; i < checkMarks.marks.length; ++i) {
+				checkMarks.marks[i].hide();
+				checkMarks.marks[i].dispose();
+			}
+			if (checkMarks.numOfCyclesCompleted == 1) {
+				checkMarks.cycles = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, -1);
+				checkMarks.cycles.text = "x" + checkMarks.numOfCyclesCompleted.toString();
+				checkMarks.cycles.show();
+			} else {
+				checkMarks.cycles.text = "x" + checkMarks.numOfCyclesCompleted.toString();
+			}
+		} else if (myTimerObj.pomodoroSection % 2 == 0){
+			var checkMark = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 0);
+			checkMark.text = "$(check)";
+			checkMark.show();
+			checkMarks.marks.push(checkMark);
+		}
 	}
 	myTimer.text = myTimerObj.getRemaining();
 	myTimer.show();
