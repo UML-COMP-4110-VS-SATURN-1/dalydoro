@@ -76,12 +76,15 @@ function activate(context) {
 	// Register command for timer status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(snoozeCommandId, () => {
 		vscode.window.showInformationMessage("snooze was selected!");
-		myTimerObj.isSnoozed = true;
-		myTimerObj.isPaused = false;
-		setTimerlength();
-		showStartStop();
-		showTimer();
-		clearInterval(startAlert);
+		if(myTimerObj.isSnoozed == false){
+			myTimerObj.isSnoozed = true;
+			myTimerObj.isPaused = false;
+			setTimerlength();
+			showStartStop();
+			showTimer();
+			clearInterval(startAlert);
+		}
+
 	}));
 
 	// Register command for start/stop status bar item
