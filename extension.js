@@ -168,9 +168,15 @@ function alert(){
 function timerRefresh(){myTimerObj.togglePause(); // Start stop button pushed, toggle pause value, update button state
 		
 	myTimerObj.timeInSec -= 1;
-	let tempTimer = Math.floor(myTimerObj.timeInSec / 60);
-	// ugly line but it works for now but it works
-	myTimerObj.remaining = tempTimer.toString() + ":" + (myTimerObj.timeInSec - (tempTimer * 60)).toString();
+	let minutes = Math.floor(myTimerObj.timeInSec / 60);
+	let seconds = myTimerObj.timeInSec - (minutes * 60);
+	
+	// Add leading a zero for when there are less than 10 seconds left
+	if (seconds < 10) {
+		myTimerObj.remaining = minutes.toString() + ":0" + seconds.toString();
+	} else {
+		myTimerObj.remaining = minutes.toString() + ":" + seconds.toString();
+	}
 	showTimer();
 }
 
@@ -213,7 +219,7 @@ function showTimer() {
 function showStartStop() {
 	if(!myTimerObj.checkPaused()){ 
 		myStartStop.text = `$(debug-pause)`;
-		myTimerObj.setRemaining(`timer started`);
+		myTimerObj.setRemaining(`Started`);
 		startTimer = setInterval(function timer(){
 			timerRefresh();
 		}, 1000);
