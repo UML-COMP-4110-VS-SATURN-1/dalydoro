@@ -133,7 +133,6 @@ function setTimerlength(){
 	let length;
 	
 	// deciding which period is being useds
-<<<<<<< HEAD
 	if(myTimerObj.isSnoozed == true){
 		length = periodLength.snooze;
 	}else {
@@ -147,17 +146,6 @@ function setTimerlength(){
 			length = periodLength.shortBreak;
 			myTimerObj.pomodoroSection++;
 		}
-=======
-	if(myTimerObj.pomodoroSection >= 7){
-		length = periodLength.longBreak;
-		myTimerObj.pomodoroSection = 0;
-	}else if(myTimerObj.pomodoroSection % 2 == 0){
-		length = periodLength.work;
-		myTimerObj.pomodoroSection++;
-	}else{
-		length = periodLength.shortBreak;
-		myTimerObj.pomodoroSection++;
->>>>>>> origin/checkmarks
 	}
 	myTimerObj.timeInSec = length * 60;
 	myTimerObj.remaining = length.toString() + ":00"; // this only works for exact minutes. 1:30 won't display properly in the beginning
