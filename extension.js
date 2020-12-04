@@ -106,7 +106,6 @@ function activate(context) {
 function setTimerlength(){
 	let length;
 	
-	console.log(myTimerObj.pomodoroSection);
 	// deciding which period is being useds
 	if(myTimerObj.pomodoroSection >= 7){
 		length = periodLength.longBreak;
