@@ -43,6 +43,11 @@ let periodLength = {
 	snooze: 5
 };
 
+let checkMarks = {
+	marks: [],
+	cycles: null,
+	numOfCyclesCompleted: 0
+};
 
 
 // this method is called when your extension is activated
@@ -128,6 +133,7 @@ function setTimerlength(){
 	let length;
 	
 	// deciding which period is being useds
+<<<<<<< HEAD
 	if(myTimerObj.isSnoozed == true){
 		length = periodLength.snooze;
 	}else {
@@ -141,6 +147,17 @@ function setTimerlength(){
 			length = periodLength.shortBreak;
 			myTimerObj.pomodoroSection++;
 		}
+=======
+	if(myTimerObj.pomodoroSection >= 7){
+		length = periodLength.longBreak;
+		myTimerObj.pomodoroSection = 0;
+	}else if(myTimerObj.pomodoroSection % 2 == 0){
+		length = periodLength.work;
+		myTimerObj.pomodoroSection++;
+	}else{
+		length = periodLength.shortBreak;
+		myTimerObj.pomodoroSection++;
+>>>>>>> origin/checkmarks
 	}
 	myTimerObj.timeInSec = length * 60;
 	myTimerObj.remaining = length.toString() + ":00"; // this only works for exact minutes. 1:30 won't display properly in the beginning
@@ -174,6 +191,28 @@ function showTimer() {
 		alert();
 		setTimerlength();
 		showStartStop();
+
+		// Add and display checkmark when a work period completed
+		// (resets on an extended break)
+		if (myTimerObj.pomodoroSection == 0) {
+			checkMarks.numOfCyclesCompleted++;
+			for(var i = 0; i < checkMarks.marks.length; ++i) {
+				checkMarks.marks[i].hide();
+				checkMarks.marks[i].dispose();
+			}
+			if (checkMarks.numOfCyclesCompleted == 1) {
+				checkMarks.cycles = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, -1);
+				checkMarks.cycles.text = "x" + checkMarks.numOfCyclesCompleted.toString();
+				checkMarks.cycles.show();
+			} else {
+				checkMarks.cycles.text = "x" + checkMarks.numOfCyclesCompleted.toString();
+			}
+		} else if (myTimerObj.pomodoroSection % 2 == 0){
+			var checkMark = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 0);
+			checkMark.text = "$(check)";
+			checkMark.show();
+			checkMarks.marks.push(checkMark);
+		}
 	}
 	myTimer.text = myTimerObj.getRemaining();
 	myTimer.show();
