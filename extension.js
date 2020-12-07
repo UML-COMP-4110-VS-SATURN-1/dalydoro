@@ -1,13 +1,13 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-const { PerformanceObserver } = require('perf_hooks');
+//const { PerformanceObserver } = require('perf_hooks');
 const vscode = require('vscode');
+const TaskList = require('./tasklist');
 
 let myTimer;
 let mySnooze;
 let myStartStop;
 let myList;
-let taskList = ["task 1", "task 2"];
 let startTimer;
 let startAlert;
 let secondaryTheme;
@@ -57,7 +57,7 @@ let checkMarks = {
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-
+	const taskList = new TaskList();
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "dalydoro" is now active!');
@@ -97,9 +97,27 @@ function activate(context) {
 	}));
 
 	// Register command for list status bar item
-	context.subscriptions.push(vscode.commands.registerCommand(listCommandId, () => {
-		vscode.window.showInformationMessage("list button selected!");
-		vscode.window.showQuickPick(taskList);
+	context.subscriptions.push(vscode.commands.registerCommand(listCommandId, async () => {
+		const currentList = await taskList.getTasks();
+		const options = [
+			'add task',
+			'remove task'
+		]
+		const quickPickOptions = [].concat(currentList,options);
+
+		vscode.window.showQuickPick(quickPickOptions)
+			.then((selection) => {
+				if(selection === 'add task') {
+					vscode.window.showInformationMessage('add task selected');
+					taskList.addTask();
+				} else if (selection === 'remove task'){
+					vscode.window.showInformationMessage('remove task selected');
+					taskList.removeTask();
+				} else if (!selection){ 
+					vscode.window.showInformationMessage(`task selected: ${selection}`);
+				}
+		})
+		
 	}));
 
 	// Create status bar timer item
