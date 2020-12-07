@@ -18,7 +18,21 @@ class TaskList {
 
     // opens quick pick of task list, when a task is selected it will be removed from the list
     async removeTask() {
-        // noop, TODO
+        const currentTasks = await this.getTasks();
+        
+        vscode.window.showQuickPick(currentTasks)
+            .then((selection) => {
+                // drop selected from list unless undefined
+                if(selection){                    
+                    for(let i = 0; i < this.taskList.length; i++){
+                        let curTaskName = this.taskList[i].name;
+                        if(selection == curTaskName){
+                            this.taskList.splice(i,1);
+                        }
+                    }
+                }
+            })
+
     }
 
     // returns list of task names

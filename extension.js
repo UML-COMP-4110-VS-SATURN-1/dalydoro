@@ -112,6 +112,7 @@ function activate(context) {
 					taskList.addTask();
 				} else if (selection === 'remove task'){
 					vscode.window.showInformationMessage('remove task selected');
+					taskList.removeTask();
 				} else if (!selection){ 
 					vscode.window.showInformationMessage(`task selected: ${selection}`);
 				}
