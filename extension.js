@@ -63,40 +63,29 @@ function activate(context) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "dalydoro" is now active!');
 
-	
-	const timerCommandId = 'dalydoro.timerSelected';
 	const snoozeCommandId = 'dalydoro.snoozeSelected';
 	const startStopCommandId = 'dalydoro.startSelected';
 	const listCommandId = 'dalydoro.listSelected';
 
-	// Register command for timer status bar item
-	context.subscriptions.push(vscode.commands.registerCommand(timerCommandId, () => {
-		vscode.window.showInformationMessage("timer was selected!");
-	}));
-
 	// Register command for snooze status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(snoozeCommandId, () => {
-		vscode.window.showInformationMessage("snooze was selected!");
-		// if(myTimerObj.isSnoozed == false){
-			myTimerObj.isPaused = false;
-			if(myTimerObj.alarm == true){
-				clearAlert();
-				clearInterval(startAlert);
-				showStartStop();
-				setTimerlength();
-			}else {
-				myTimerObj.isSnoozed = true;
-				myTimerObj.timeInSec += periodLength.snooze * 60; // adds snooze length in seconds
-			}
-			showTimer();
-		// }
-
+		myTimerObj.isPaused = false;
+		if(myTimerObj.alarm == true){
+			clearAlert();
+			clearInterval(startAlert);
+			showStartStop();
+			setTimerlength();
+		}else {
+			myTimerObj.isSnoozed = true;
+			myTimerObj.timeInSec += periodLength.snooze * 60; // adds snooze length in seconds
+		}
+		showTimer();
 	}));
 
 	// Register command for start/stop status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(startStopCommandId, () => {
-		vscode.window.showInformationMessage("start/stop button selected!");
-		myTimerObj.togglePause(); // Start stop button pushed, toggle pause value, update button state
+		// Start stop button pushed, toggle pause value, update button state
+		myTimerObj.togglePause(); 
 		clearInterval(startAlert);
 		showStartStop();
 		showTimer();
@@ -115,17 +104,13 @@ function activate(context) {
 		vscode.window.showQuickPick(quickPickOptions)
 			.then((selection) => {
 				if(selection === 'add task') {
-					vscode.window.showInformationMessage('add task selected');
 					taskList.addTask();
 				} else if (selection === 'remove task'){
-					vscode.window.showInformationMessage('remove task selected');
 					taskList.removeTask();
 				} else if (selection){ 
-					vscode.window.showInformationMessage(`task selected: ${selection}`);
 					taskList.markTaskComplete(selection);
 				}
 		})
-		
 	}));
 
 	// Create status bar timer item
@@ -135,7 +120,6 @@ function activate(context) {
 
 	// Create status bar timer item
 	myTimer = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 4);
-	myTimer.command = timerCommandId;
 	context.subscriptions.push(myTimer);
 
 	// Create start status bar item
@@ -181,19 +165,17 @@ function setTimerlength(){
 }
 
 function alert(){
-	// startAlert = setInterval(function timer(){
-		if(vscode.window.activeColorTheme.kind == themeKind){ // base theme
-			vscode.workspace.getConfiguration('workbench').update('colorTheme', secondaryTheme, vscode.ConfigurationTarget.Global);
-		}else {
-			vscode.workspace.getConfiguration('workbench').update('colorTheme', theme, vscode.ConfigurationTarget.Global);
-		}
-	// }, 1000);
+	if(vscode.window.activeColorTheme.kind == themeKind){ // base theme
+		vscode.workspace.getConfiguration('workbench').update('colorTheme', secondaryTheme, vscode.ConfigurationTarget.Global);
+	}else {
+		vscode.workspace.getConfiguration('workbench').update('colorTheme', theme, vscode.ConfigurationTarget.Global);
+	}
+
 	myTimerObj.alarm = true;
 }
 
 // this function will refresh the timer on the bottom of the corner
 function timerRefresh(){
-		
 	myTimerObj.timeInSec -= 1;
 	let minutes = Math.floor(myTimerObj.timeInSec / 60);
 	let seconds = myTimerObj.timeInSec - (minutes * 60);
@@ -210,7 +192,8 @@ function timerRefresh(){
 function showTimer() {
 	if(myTimerObj.timeInSec <= 0){
 		myTimerObj.setRemaining(`Timer expired`);
-		myTimerObj.isPaused = true; // sets paused to true so that the alarm will go until play is pressed again
+		// sets paused to true so that the alarm will go until play is pressed again
+		myTimerObj.isPaused = true; 
 		clearInterval(startTimer);
 		alert();
 		setTimerlength();

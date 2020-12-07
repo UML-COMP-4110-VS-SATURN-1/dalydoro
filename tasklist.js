@@ -12,7 +12,6 @@ class TaskList {
             prompt: 'Enter a new task to be tracked',
             placeHolder: 'Please enter a new task',
         });
-        vscode.window.showInformationMessage(`new task: ${result}\n was added to the task list`);
         this.taskList.push(new Task(result));
     }
 
