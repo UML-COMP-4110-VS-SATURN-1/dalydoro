@@ -37,8 +37,8 @@ let myTimerObj = {
 };
 
 let periodLength = {
-	work: 0.1,
-	shortBreak: 0.2,
+	work: 25,
+	shortBreak: 5,
 	longBreak: 10,
 	snooze: 5
 };
@@ -73,7 +73,7 @@ function activate(context) {
 		vscode.window.showInformationMessage("timer was selected!");
 	}));
 
-	// Register command for timer status bar item
+	// Register command for snooze status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(snoozeCommandId, () => {
 		vscode.window.showInformationMessage("snooze was selected!");
 		if(myTimerObj.isSnoozed == false){
@@ -82,6 +82,7 @@ function activate(context) {
 			setTimerlength();
 			showStartStop();
 			showTimer();
+			clearAlert();
 			clearInterval(startAlert);
 		}
 
@@ -94,6 +95,7 @@ function activate(context) {
 		clearInterval(startAlert);
 		showStartStop();
 		showTimer();
+		clearAlert();
 	}));
 
 	// Register command for list status bar item
@@ -112,7 +114,7 @@ function activate(context) {
 					taskList.addTask();
 				} else if (selection === 'remove task'){
 					vscode.window.showInformationMessage('remove task selected');
-					taskList.removeTask();
+					taskList.removeTask();``
 				} else if (!selection){ 
 					vscode.window.showInformationMessage(`task selected: ${selection}`);
 				}
@@ -173,13 +175,13 @@ function setTimerlength(){
 }
 
 function alert(){
-	startAlert = setInterval(function timer(){
+	// startAlert = setInterval(function timer(){
 		if(vscode.window.activeColorTheme.kind == themeKind){ // base theme
 			vscode.workspace.getConfiguration('workbench').update('colorTheme', secondaryTheme, vscode.ConfigurationTarget.Global);
 		}else {
 			vscode.workspace.getConfiguration('workbench').update('colorTheme', theme, vscode.ConfigurationTarget.Global);
 		}
-	}, 1000);
+	// }, 1000);
 }
 
 // this function will refresh the timer on the bottom of the corner
@@ -233,6 +235,10 @@ function showTimer() {
 	myTimer.show();
 }
 
+function clearAlert(){
+	vscode.workspace.getConfiguration('workbench').update('colorTheme', theme, vscode.ConfigurationTarget.Global);
+}
+
 
 function showStartStop() {
 	if(!myTimerObj.checkPaused()){ 
@@ -245,7 +251,6 @@ function showStartStop() {
 		myStartStop.text = `$(play)`;
 		clearInterval(startTimer);
 	}
-	vscode.workspace.getConfiguration('workbench').update('colorTheme', theme, vscode.ConfigurationTarget.Global);
 	myStartStop.show();
 }
 
