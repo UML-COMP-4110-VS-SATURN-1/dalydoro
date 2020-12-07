@@ -185,7 +185,7 @@ function alert(){
 }
 
 // this function will refresh the timer on the bottom of the corner
-function timerRefresh(){myTimerObj.togglePause(); // Start stop button pushed, toggle pause value, update button state
+function timerRefresh(){
 		
 	myTimerObj.timeInSec -= 1;
 	let minutes = Math.floor(myTimerObj.timeInSec / 60);
