@@ -22,6 +22,7 @@ let myTimerObj = {
 	remaining: "Timer will start",// "i am timer", // initial value
 	isPaused: true, // shows whether paused
 	isSnoozed: false, // shows weather snoozed or not
+	alarm: false,
 	checkPaused: function() {
 		return this.isPaused;
 	},
@@ -37,7 +38,7 @@ let myTimerObj = {
 };
 
 let periodLength = {
-	work: 25,
+	work: 0.1,
 	shortBreak: 5,
 	longBreak: 10,
 	snooze: 5
@@ -79,11 +80,16 @@ function activate(context) {
 		if(myTimerObj.isSnoozed == false){
 			myTimerObj.isSnoozed = true;
 			myTimerObj.isPaused = false;
-			setTimerlength();
-			showStartStop();
+			if(myTimerObj.alarm == true){
+				clearAlert();
+				clearInterval(startAlert);
+				showStartStop();
+				setTimerlength();
+			}else {
+				myTimerObj.timeInSec += 300; // adds 300 sceonds
+				console.log(myTimerObj.timeInSec);
+			}
 			showTimer();
-			clearAlert();
-			clearInterval(startAlert);
 		}
 
 	}));
@@ -182,6 +188,7 @@ function alert(){
 			vscode.workspace.getConfiguration('workbench').update('colorTheme', theme, vscode.ConfigurationTarget.Global);
 		}
 	// }, 1000);
+	myTimerObj.alarm = true;
 }
 
 // this function will refresh the timer on the bottom of the corner
@@ -236,6 +243,7 @@ function showTimer() {
 }
 
 function clearAlert(){
+	myTimerObj.alarm = false;
 	vscode.workspace.getConfiguration('workbench').update('colorTheme', theme, vscode.ConfigurationTarget.Global);
 }
 
