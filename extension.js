@@ -41,7 +41,7 @@ let periodLength = {
 	work: 0.1,
 	shortBreak: 5,
 	longBreak: 10,
-	snooze: 5
+	snooze: 0.1
 };
 
 let checkMarks = {
@@ -77,8 +77,7 @@ function activate(context) {
 	// Register command for snooze status bar item
 	context.subscriptions.push(vscode.commands.registerCommand(snoozeCommandId, () => {
 		vscode.window.showInformationMessage("snooze was selected!");
-		if(myTimerObj.isSnoozed == false){
-			myTimerObj.isSnoozed = true;
+		// if(myTimerObj.isSnoozed == false){
 			myTimerObj.isPaused = false;
 			if(myTimerObj.alarm == true){
 				clearAlert();
@@ -86,11 +85,11 @@ function activate(context) {
 				showStartStop();
 				setTimerlength();
 			}else {
-				myTimerObj.timeInSec += 300; // adds 300 sceonds
-				console.log(myTimerObj.timeInSec);
+				myTimerObj.isSnoozed = true;
+				myTimerObj.timeInSec += periodLength.snooze * 60; // adds snooze length in seconds
 			}
 			showTimer();
-		}
+		// }
 
 	}));
 
