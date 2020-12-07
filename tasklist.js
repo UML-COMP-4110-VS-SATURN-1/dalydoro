@@ -44,6 +44,18 @@ class TaskList {
         return currentList;
     }
 
+    // mark a selected task complete. Add checkmark to name and mark task complete
+    async markTaskComplete(selection){
+        // find task
+        for(let i = 0; i < this.taskList.length; i++){
+            if(selection === this.taskList[i].name && this.taskList[i].isComplete === false){
+                this.taskList[i].CompleteTask();
+                this.taskList[i].name = '$(check) ' + this.taskList[i].name;
+                break;
+            }
+        }
+    }
+
 }
 
 
