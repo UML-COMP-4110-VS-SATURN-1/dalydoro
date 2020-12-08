@@ -38,10 +38,10 @@ let myTimerObj = {
 };
 
 let periodLength = {
-	work: 0.1,
+	work: 25,
 	shortBreak: 5,
 	longBreak: 10,
-	snooze: 0.1
+	snooze: 25
 };
 
 let checkMarks = {
