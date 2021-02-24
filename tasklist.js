@@ -8,11 +8,14 @@ class TaskList {
     // opens input box to collect new task name, create a new task from that name and add 
     // to taskList
     async addTask() {
-        const result = await vscode.window.showInputBox({
+        let result = await vscode.window.showInputBox({
             prompt: 'Enter a new task to be tracked',
             placeHolder: 'Please enter a new task',
         });
-        this.taskList.push(new Task(result));
+        if(!result){
+            this.taskList.push(new Task(result));
+        }
+        
     }
 
     // opens quick pick of task list, when a task is selected it will be removed from the list
